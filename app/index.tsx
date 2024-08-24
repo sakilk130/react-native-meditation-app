@@ -8,7 +8,7 @@ import beachImage from '@/assets/meditation-images/beach.webp';
 import CustomButton from '@/components/custom-button';
 import AppGradient from '@/components/app-gradient';
 
-const App = () => {
+const AppScreen = () => {
   const router = useRouter();
   return (
     <View className="flex-1">
@@ -18,6 +18,7 @@ const App = () => {
         className="flex-1"
       >
         <AppGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.8)']}>
+          <StatusBar style="light" />
           <SafeAreaView className="flex justify-between flex-1 px-1">
             <View>
               <Text className="text-4xl font-bold text-center text-white">
@@ -31,7 +32,6 @@ const App = () => {
               onPress={() => router.push('/nature-meditate')}
               title="Get Started"
             />
-            <StatusBar style="light" />
           </SafeAreaView>
         </AppGradient>
       </ImageBackground>
@@ -39,4 +39,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default AppScreen;

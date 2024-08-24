@@ -1,8 +1,8 @@
-import { View, Text } from 'react-native';
 import React from 'react';
 import { Tabs } from 'expo-router';
-import Colors from '@/constants/Colors';
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+
+import { colors } from '@/constants/colors';
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',
@@ -13,7 +13,7 @@ const TabsLayout = () => {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: colors.primary,
       }}
     >
       <Tabs.Screen

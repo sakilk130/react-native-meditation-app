@@ -9,12 +9,11 @@ import {
 import React from 'react';
 
 import AppGradient from '@/components/app-gradient';
-
 import { MEDITATION_DATA } from '@/constants/meditation-data';
 import MEDITATION_IMAGES from '@/constants/meditation-images';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const NatureMeditatePage = () => {
+const NatureMeditateScreen = () => {
   return (
     <View className="flex-1">
       <AppGradient colors={['#161b2e', '#0a4d4a', '#766e67']}>
@@ -78,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NatureMeditatePage;
+export default NatureMeditateScreen;
