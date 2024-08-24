@@ -1,12 +1,12 @@
 import { View, Text, ImageBackground } from 'react-native';
 import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 
 import beachImage from '@/assets/meditation-images/beach.webp';
-import CustomButton from '@/components/CustomButton';
+import CustomButton from '@/components/custom-button';
+import AppGradient from '@/components/app-gradient';
 
 const App = () => {
   const router = useRouter();
@@ -17,16 +17,13 @@ const App = () => {
         resizeMethod="resize"
         className="flex-1"
       >
-        <LinearGradient
-          className="flex-1"
-          colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.8)']}
-        >
-          <SafeAreaView className="flex flex-1 px-1 justify-between">
+        <AppGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.8)']}>
+          <SafeAreaView className="flex justify-between flex-1 px-1">
             <View>
-              <Text className="text-center text-4xl text-white font-bold">
+              <Text className="text-4xl font-bold text-center text-white">
                 Simple Meditation
               </Text>
-              <Text className="text-center text-white font-regular text-2xl mt-3">
+              <Text className="mt-3 text-2xl text-center text-white font-regular">
                 Simplifying Meditation for Everyone
               </Text>
             </View>
@@ -36,7 +33,7 @@ const App = () => {
             />
             <StatusBar style="light" />
           </SafeAreaView>
-        </LinearGradient>
+        </AppGradient>
       </ImageBackground>
     </View>
   );
