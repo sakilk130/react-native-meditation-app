@@ -1,0 +1,60 @@
+name: React Native CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build the app (Android)
+        run: |
+          npx react-native info
+          cd android
+          ./gradlew assembleRelease
+        env:
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install iOS dependencies
+        run: |
+          cd ios
+          pod install
+
+      - name: Build the app (iOS)
+        run: |
+          cd ios
+          xcodebuild -workspace YourApp.xcworkspace -scheme YourApp -configuration Release -sdk iphoneos
