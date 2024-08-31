@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'expo-router';
 
 import { GalleryPreviewData } from '@/interfaces/affirmation-category';
+import { BASE_URL } from '@/config/axios';
 
 interface GuidedAffirmationsGalleryProps {
   title: string;
@@ -28,7 +29,9 @@ const GuidedAffirmationsGallery = ({
               <Pressable>
                 <View className="w-32 mr-4 rounded-md h-36">
                   <Image
-                    source={item.image}
+                    source={{
+                      uri: `${BASE_URL}/${item.image}`,
+                    }}
                     resizeMode="cover"
                     className="w-full h-full"
                   />

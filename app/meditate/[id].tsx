@@ -3,15 +3,17 @@ import React, { useContext, useEffect, useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Audio } from 'expo-av';
 
-import MEDITATION_IMAGES from '@/constants/meditation-images';
 import AppGradient from '@/components/app-gradient';
 import { AntDesign } from '@expo/vector-icons';
 import CustomButton from '@/components/custom-button';
-import { AUDIO_FILES, MEDITATION_DATA } from '@/constants/meditation-data';
 import { TimerContext } from '@/context/timer-context';
+import instance, { BASE_URL } from '@/config/axios';
+import { API_ENDPOINTS } from '@/constants/api-endpoints';
 
 const MeditateScreen = () => {
   const { id } = useLocalSearchParams();
+  const [meditationData, setMeditationData] = useState<any>();
+
   const { duration: secondsRemaining, setDuration: setSecondsRemaining } =
     useContext(TimerContext);
 
@@ -26,8 +28,11 @@ const MeditateScreen = () => {
   const formattedTimeSeconds = String(secondsRemaining % 60).padStart(2, '0');
 
   const initializeSound = async () => {
-    const audioFileName = MEDITATION_DATA[Number(id) - 1].audio;
-    const { sound } = await Audio.Sound.createAsync(AUDIO_FILES[audioFileName]);
+    const audioFileUrl = `${BASE_URL}/${meditationData?.audio}`;
+    const { sound } = await Audio.Sound.createAsync(
+      { uri: audioFileUrl },
+      { shouldPlay: false }
+    );
     setSound(sound);
     return sound;
   };
@@ -55,6 +60,19 @@ const MeditateScreen = () => {
     router.push('/(modal)/adjust-meditation-duration');
   };
 
+  const fetchMeditationData = async () => {
+    try {
+      const response = await instance.get(
+        API_ENDPOINTS.GET_MEDITATION_BY_ID(Number(id))
+      );
+      if (response.data?.status === 200) {
+        setMeditationData(response.data?.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     let timerId: NodeJS.Timeout;
     if (secondsRemaining === 0) {
@@ -76,10 +94,18 @@ const MeditateScreen = () => {
     };
   }, [audioSound]);
 
+  useEffect(() => {
+    fetchMeditationData();
+  }, []);
+
   return (
     <View className="flex-1">
       <ImageBackground
-        source={MEDITATION_IMAGES[Number(id) - 1]}
+        source={
+          {
+            uri: `${BASE_URL}/${meditationData?.image}`,
+          } as any
+        }
         className="flex-1"
       >
         <AppGradient colors={['transparent', 'rgba(0,0,0,0.8)']}>

@@ -6,16 +6,33 @@ import {
   ImageBackground,
   StyleSheet,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
 
 import AppGradient from '@/components/app-gradient';
-import { MEDITATION_DATA } from '@/constants/meditation-data';
-import MEDITATION_IMAGES from '@/constants/meditation-images';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import instance, { BASE_URL } from '@/config/axios';
+import { API_ENDPOINTS } from '@/constants/api-endpoints';
+import { MeditationType } from '@/interfaces/meditation';
 
 const NatureMeditateScreen = () => {
   const router = useRouter();
+  const [meditations, setMeditations] = useState<MeditationType[]>([]);
+
+  const fetchMeditations = async () => {
+    try {
+      const response = await instance.get(API_ENDPOINTS.GET_MEDITATIONS);
+      if (response.data?.status === 200) {
+        setMeditations(response.data?.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMeditations();
+  }, []);
 
   return (
     <View className="flex-1">
@@ -30,7 +47,7 @@ const NatureMeditateScreen = () => {
         </View>
         <View>
           <FlatList
-            data={MEDITATION_DATA}
+            data={meditations}
             className="mb-20"
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
@@ -41,7 +58,9 @@ const NatureMeditateScreen = () => {
                 className="h-48 my-3 overflow-hidden rounded-md"
               >
                 <ImageBackground
-                  source={MEDITATION_IMAGES[item.id - 1]}
+                  source={{
+                    uri: `${BASE_URL}/${item.image}`,
+                  }}
                   resizeMode="cover"
                   style={styles.backgroundImage}
                 >
